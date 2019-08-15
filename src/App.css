@@ -1,33 +1,218 @@
-.App {
-  text-align: center;
+body {
+  font: 14px "Century Gothic", Futura, sans-serif;
+  margin: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: #43C6AC;  /* fallback for old browsers */
+  background: -webkit-linear-gradient(to right, #191654, #43C6AC);  /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to right, #191654, #43C6AC); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  color: #fff;
 }
 
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 40vmin;
-  pointer-events: none;
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.game {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
 }
 
-.App-link {
-  color: #61dafb;
+.game-status{
+  margin-bottom: 5rem;
+  font-size: 29px;
+}
+button,input{
+  border: none;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+.btn{
+  position: relative;
+  margin-top: 2rem;
+  padding: 1rem 4rem;
+  width: 196px;
+  border: 1px solid #fff;
+  cursor: pointer;
+  outline: none;
+}
+
+.game-reset{
+  background: none;
+  color: #fff;
+  transition: 250ms all ease-in-out;
+
+}
+.game-reset:hover{
+  box-shadow: inset 0 0 5px 1px #fff;
+  transition: 250ms all ease-in-out;
+}
+
+.new-game{
+  background: #fff;
+
+}
+.new-game:hover{
+  animation: swing 1s ease;
+  animation-iteration-count:1;
+}
+
+.results{
+  width: 100%;
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.players{
+  display: flex;
+  justify-content: space-around;
+  font-size: 18px;
+}
+
+.player-result{
+  font-family: 'Indie Flower', cursive;
+  font-size: 32px;
+  font-weight: 900;
+}
+.green{
+  color:green;
+}
+.red{
+  color:red;
+}
+
+.draw{
+  border: none;
+  background: none;
+  font-size: 26px;
+  color:#fff;
+  cursor: pointer;
+}
+
+.player-names{
+  position: absolute;
+  top: 40px;
+  left: 40px;
+}
+
+.player-names input{
+  display: block;
+  background: none;
+  border-bottom: 1px solid #fff;
+  margin-bottom: 20px;
+  color:#fff;
+  padding: .5rem 1rem;
+  outline:none;
+}
+
+::placeholder{
+  color:rgba(255, 255, 255, 0.733);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.animated {
+  -webkit-animation-duration: 1s;
+  animation-duration: 1s;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
+  -webkit-animation-iteration-count: infinite;
+  animation-iteration-count: infinite;
+}
+
+@keyframes tada {
+  0% {
+    -webkit-transform: scale3d(1, 1, 1);
+    -ms-transform: scale3d(1, 1, 1);
+    transform: scale3d(1, 1, 1);
   }
-  to {
-    transform: rotate(360deg);
+
+  10%, 20% {
+    -webkit-transform: scale3d(.9, .9, .9) rotate3d(0, 0, 1, -3deg);
+    -ms-transform: scale3d(.9, .9, .9) rotate3d(0, 0, 1, -3deg);
+    transform: scale3d(.9, .9, .9) rotate3d(0, 0, 1, -30deg);
   }
+
+  30%, 50%, 70%, 90% {
+    -webkit-transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, 3deg);
+    -ms-transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, 3deg);
+    transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, 30deg);
+  }
+
+  40%, 60%, 80% {
+    -webkit-transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, -3deg);
+    -ms-transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, -3deg);
+    transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, -3deg);
+  }
+
+  100% {
+    -webkit-transform: scale3d(1, 1, 1);
+    -ms-transform: scale3d(1, 1, 1);
+    transform: scale3d(1, 1, 1);
+  }
+}
+
+.tada {
+  -webkit-animation-name: tada;
+  animation-name: tada;
+}
+
+/* 
+.board-row:after {
+  clear: both;
+  content: "";
+  display: table;
+} */
+
+
+
+
+@keyframes swing
+{
+    15%
+    {
+        -webkit-transform: translateX(5px);
+        transform: translateX(5px);
+    }
+    30%
+    {
+        -webkit-transform: translateX(-5px);
+        transform: translateX(-5px);
+    }
+    50%
+    {
+        -webkit-transform: translateX(3px);
+        transform: translateX(3px);
+    }
+    65%
+    {
+        -webkit-transform: translateX(-3px);
+        transform: translateX(-3px);
+    }
+    80%
+    {
+        -webkit-transform: translateX(2px);
+        transform: translateX(2px);
+    }
+    100%
+    {
+        -webkit-transform: translateX(0);
+        transform: translateX(0);
+    }
+}
+
+.swing{
+  animation: swing 1s ease;
+  animation-iteration-count: infinite;
 }

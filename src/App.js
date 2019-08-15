@@ -1,26 +1,242 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import Board from './components/Board';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import ('./App.css');
+
+class App extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            squares: Array(9).fill(null),
+            xIsNext: true,
+            winns:{
+              x:0,
+              o:0
+            },
+            names:{
+              playerX:'Player1',
+              playerO:'Player2'
+            }
+        };
+    }
+
+    handleClick= i=> {
+        const squares = this.state.squares.slice();
+        if (calculateWinner(squares) || squares[i]) {
+            return;
+        }
+        squares[i] = this.state.xIsNext ? "X" : "O";
+        this.setState({
+            squares:squares,
+            xIsNext: !this.state.xIsNext
+        });
+    }
+
+    handleRestart=lastWinner=>{
+        let onPlay;
+        if(lastWinner==="X"){
+            onPlay=false
+            this.setState({
+              squares: Array(9).fill(null),
+              xIsNext:onPlay,
+              winns:{
+                x:this.state.winns.x+1,
+                o:this.state.winns.o
+              }
+          })
+        }else if(lastWinner==='O'){
+            onPlay=true
+            this.setState({
+              squares: Array(9).fill(null),
+              xIsNext:onPlay,
+              winns:{
+                o:this.state.winns.o+1,
+                x:this.state.winns.x
+              }
+          })
+        }else if(lastWinner===null){
+          onPlay=true
+          this.setState({
+            squares: Array(9).fill(null),
+            xIsNext:onPlay,
+            winns:{
+              o:this.state.winns.o,
+              x:this.state.winns.x
+            }
+        })
+        }
+
+    }
+
+    drawReset=lastGamePlayer=>{
+      let onPlay;
+      if(lastGamePlayer==="X"){
+        onPlay=false
+      }else{
+        onPlay=true
+      }
+      this.setState({
+        squares: Array(9).fill(null),
+        xIsNext:onPlay,
+        winns:{
+          o:this.state.winns.o,
+          x:this.state.winns.x
+        }
+    })
+    }
+
+    handleNawGame=()=>{
+      this.setState({
+        squares: Array(9).fill(null),
+        xIsNext: true,
+        winns:{
+          x:0,
+          o:0
+        }
+      })
+    }
+    
+    handleUpdatePlayerX=event=>{
+      let playerName;
+      if(event.target.value===''){
+        playerName='Player1';
+      }else{
+        playerName=event.target.value;
+      }
+      this.setState({
+        names:{
+          playerX:playerName,
+          playerO:this.state.names.playerO
+        }
+      })
+    }
+    handleUpdatePlayerO=event=>{
+      let playerName;
+      if(event.target.value===''){
+        playerName='Player2';
+      }else{
+        playerName=event.target.value;
+      }
+      this.setState({
+        names:{
+          playerX:this.state.names.playerX,
+          playerO:playerName
+        }
+      })
+    }
+
+    CurrentBeter(pl1,pl2){
+      if(pl1===pl2){
+        return null
+      }else if(pl1>pl2){
+        return "green"
+      }else{
+        return "red"
+      }
+    }
+
+    render() {
+        const winner = calculateWinner(this.state.squares);
+        let status;
+        if (winner) {
+              status=
+              <div className='game-status animated tada'>
+                Winner is: {winner.player}({winner.player==="X"?this.state.names.playerX:this.state.names.playerO})
+              </div>
+        }else {
+            if(this.state.squares.includes(null)){
+              status=
+              <div className='game-status'>
+                Next player:
+                 <span className='player-result'>
+                  {(this.state.xIsNext ? "X" : "O")}
+                </span>
+              </div>
+            }else{
+              status=
+              <div className='game-status'>
+                Draw, 
+                <button className='draw swing' onClick={()=>this.drawReset((this.state.xIsNext ? "X" : "O"))}>
+                  play again
+                </button>
+              </div>
+            }
+        }
+
+        return (
+            <div className="game">
+              <div className='results'>
+                <p>Results</p>
+                <div className='players'>
+                  <p>
+                  {this.state.names.playerX}: <span className={'player-result '+(this.CurrentBeter(this.state.winns.x,this.state.winns.o))}>{this.state.winns.x}</span>
+                  </p>
+                  <p>
+                  {this.state.names.playerO}: <span className={'player-result '+(this.CurrentBeter(this.state.winns.o,this.state.winns.x))}>{this.state.winns.o}</span>
+                  </p>
+                </div>
+              </div>
+              {status}
+              <div className='player-names'>
+                <form>
+                  <label htmlFor='playerX'>Player X name</label>
+                  <input type='text' id='playerX' name='playerX' placeholder='Enter name of player X' onChange={this.handleUpdatePlayerX} />
+                  <label htmlFor='playerO'>Player O name</label>
+                  <input type='text' id='playerO' name='playerO' placeholder='Enter name of player O' onChange={this.handleUpdatePlayerO} />
+                </form>
+              </div>
+                <div className="game-board">
+                    <Board
+                        winningSquares={winner ? winner.line : []}
+                        direction={winner?winner.direction:""}
+                        squares={this.state.squares}
+                        onClick={i => this.handleClick(i)}
+                    />
+                </div>
+                    <button
+                        className='btn game-reset'
+                        onClick={()=>this.handleRestart(winner?winner.player:null)}>
+                            Restart
+                    </button> 
+                    <button
+                    className='btn new-game'
+                    onClick={this.handleNawGame}
+                    >
+                      New game
+                    </button>
+            </div>
+        );
+    }
 }
 
-export default App;
+function calculateWinner(squares) {
+    const lines = [
+        [0, 1, 2],
+        [3, 4, 5],
+        [6, 7, 8],
+        [0, 3, 6],
+        [1, 4, 7],
+        [2, 5, 8],
+        [0, 4, 8],
+        [2, 4, 6]
+    ];
+    for (let i = 0; i < lines.length; i++) {
+        const [a, b, c] = lines[i];
+        let dir;
+        if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
+          if(i===0 || i===1 || i===2){
+            dir=1;
+          }else if(i===3 || i===4 || i===5){
+            dir=2;
+          }else if(i===6){
+            dir=3
+          }else if(i===7){
+            dir=4
+          }
+            return { player: squares[a], line: [a, b, c], direction:dir };
+        }
+    }
+    return  null;
+}
+
+export default App
