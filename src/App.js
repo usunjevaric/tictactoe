@@ -19,10 +19,10 @@ class App extends React.Component {
             }
         };
     }
-
+    //click on square
     handleClick= i=> {
         const squares = this.state.squares.slice();
-        if (calculateWinner(squares) || squares[i]) {
+        if (calculateWinner(squares).line.length>0||squares[i]) {
             return;
         }
         squares[i] = this.state.xIsNext ? "X" : "O";
@@ -31,7 +31,7 @@ class App extends React.Component {
             xIsNext: !this.state.xIsNext
         });
     }
-
+    //button restart
     handleRestart=lastWinner=>{
         let onPlay;
         if(lastWinner==="X"){
@@ -67,7 +67,7 @@ class App extends React.Component {
         }
 
     }
-
+    //after draw button showed
     drawReset=lastGamePlayer=>{
       let onPlay;
       if(lastGamePlayer==="X"){
@@ -84,7 +84,7 @@ class App extends React.Component {
         }
     })
     }
-
+    //start new game button
     handleNawGame=()=>{
       this.setState({
         squares: Array(9).fill(null),
@@ -95,7 +95,7 @@ class App extends React.Component {
         }
       })
     }
-    
+    // change name of player x
     handleUpdatePlayerX=event=>{
       let playerName;
       if(event.target.value===''){
@@ -110,6 +110,7 @@ class App extends React.Component {
         }
       })
     }
+    // change name of player o
     handleUpdatePlayerO=event=>{
       let playerName;
       if(event.target.value===''){
@@ -125,6 +126,7 @@ class App extends React.Component {
       })
     }
 
+    //Green result of better player
     CurrentBeter(pl1,pl2){
       if(pl1===pl2){
         return null
@@ -136,9 +138,9 @@ class App extends React.Component {
     }
 
     render() {
-        const winner = calculateWinner(this.state.squares);
+        let winner = calculateWinner(this.state.squares);
         let status;
-        if (winner) {
+        if (winner.line.length>0) {
               status=
               <div className='game-status animated tada'>
                 Winner is: {winner.player}({winner.player==="X"?this.state.names.playerX:this.state.names.playerO})
@@ -195,7 +197,7 @@ class App extends React.Component {
                 </div>
                     <button
                         className='btn game-reset'
-                        onClick={()=>this.handleRestart(winner?winner.player:null)}>
+                        onClick={()=>this.handleRestart(winner.line.length>0?winner.player:null)}>
                             Restart
                     </button> 
                     <button
@@ -220,23 +222,31 @@ function calculateWinner(squares) {
         [0, 4, 8],
         [2, 4, 6]
     ];
-    for (let i = 0; i < lines.length; i++) {
-        const [a, b, c] = lines[i];
-        let dir;
-        if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
-          if(i===0 || i===1 || i===2){
-            dir=1;
-          }else if(i===3 || i===4 || i===5){
-            dir=2;
-          }else if(i===6){
-            dir=3
-          }else if(i===7){
-            dir=4
-          }
-            return { player: squares[a], line: [a, b, c], direction:dir };
-        }
-    }
-    return  null;
-}
+       const object= lines.reduce((acc,line,idx)=>{
+          const[a,b,c]=line;
 
+          let dir;
+          if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
+            if(idx<=2){
+              dir=1;
+            }else if(idx<=5){
+              dir=2;
+            }else if(idx===6){
+              dir=3
+            }else if(idx===7){
+              dir=4
+            }
+            acc.player=squares[a];
+            acc.line=line;
+            acc.direction=dir;  
+          }
+          return acc;
+        },{
+          player:'',
+        line:[],
+        direction:-1
+      })
+    return object;
+   
+}
 export default App
