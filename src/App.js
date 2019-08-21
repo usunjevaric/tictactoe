@@ -1,7 +1,7 @@
 import React from 'react';
 import Board from './components/Board';
 
-import ('./App.css');
+import ('./App.scss');
 
 class App extends React.Component {
     constructor(props) {
@@ -150,7 +150,7 @@ class App extends React.Component {
               status=
               <div className='game-status'>
                 Next player:
-                 <span className='player-result'>
+                 <span className='indieFont'>
                   {(this.state.xIsNext ? "X" : "O")}
                 </span>
               </div>
@@ -167,34 +167,35 @@ class App extends React.Component {
 
         return (
             <div className="game">
-              <div className='results'>
-                <p>Results</p>
-                <div className='players'>
-                  <p>
-                  {this.state.names.playerX}: <span className={'player-result '+(this.CurrentBeter(this.state.winns.x,this.state.winns.o))}>{this.state.winns.x}</span>
-                  </p>
-                  <p>
-                  {this.state.names.playerO}: <span className={'player-result '+(this.CurrentBeter(this.state.winns.o,this.state.winns.x))}>{this.state.winns.o}</span>
-                  </p>
-                </div>
-              </div>
-              {status}
-              <div className='player-names'>
-                <form>
-                  <label htmlFor='playerX'>Player X name</label>
-                  <input type='text' id='playerX' name='playerX' placeholder='Enter name of player X' onChange={this.handleUpdatePlayerX} />
-                  <label htmlFor='playerO'>Player O name</label>
-                  <input type='text' id='playerO' name='playerO' placeholder='Enter name of player O' onChange={this.handleUpdatePlayerO} />
-                </form>
-              </div>
-                <div className="game-board">
-                    <Board
-                        winningSquares={winner ? winner.line : []}
-                        direction={winner?winner.direction:""}
-                        squares={this.state.squares}
-                        onClick={i => this.handleClick(i)}
-                    />
-                </div>
+                {/*results*/}
+                  <div className='results'>
+                    <p>Results</p>
+                    <div className='players'>
+                      <p>
+                      {this.state.names.playerX}: <span className={'player-result '+(this.CurrentBeter(this.state.winns.x,this.state.winns.o))}>{this.state.winns.x}</span>
+                      </p>
+                      <p>
+                      {this.state.names.playerO}: <span className={'player-result '+(this.CurrentBeter(this.state.winns.o,this.state.winns.x))}>{this.state.winns.o}</span>
+                      </p>
+                    </div>
+                  </div>
+                  {status}
+                  <div className='player-names'>
+                    <form>
+                      <label htmlFor='playerX'>Player X name</label>
+                      <input type='text' id='playerX' name='playerX' placeholder='Enter name of player X' onChange={this.handleUpdatePlayerX} />
+                      <label htmlFor='playerO'>Player O name</label>
+                      <input type='text' id='playerO' name='playerO' placeholder='Enter name of player O' onChange={this.handleUpdatePlayerO} />
+                    </form>
+                  </div>
+                    <div className="game-board">
+                        <Board
+                            winningSquares={winner ? winner.line : []}
+                            direction={winner?winner.direction:""}
+                            squares={this.state.squares}
+                            onClick={i => this.handleClick(i)}
+                        />
+                    </div>
                     <button
                         className='btn game-reset'
                         onClick={()=>this.handleRestart(winner.line.length>0?winner.player:null)}>
@@ -222,7 +223,7 @@ function calculateWinner(squares) {
         [0, 4, 8],
         [2, 4, 6]
     ];
-       const object= lines.reduce((acc,line,idx)=>{
+       return lines.reduce((acc,line,idx)=>{
           const[a,b,c]=line;
 
           let dir;
@@ -246,7 +247,5 @@ function calculateWinner(squares) {
         line:[],
         direction:-1
       })
-    return object;
-   
 }
 export default App

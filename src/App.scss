@@ -1,0 +1,215 @@
+@mixin transition($speed){
+  transition: $speed ease-in-out all;
+}
+
+body {
+  font: 14px "Century Gothic", Futura, sans-serif;
+  margin: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: #43C6AC;  /* fallback for old browsers */
+  background: -webkit-linear-gradient(to right, #191654, #43C6AC);  /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to right, #191654, #43C6AC); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  color: #fff;
+}
+
+button,input {
+  border: none;
+  outline:none;
+}
+
+::placeholder{
+  color:rgba(255, 255, 255, 0.733);
+}
+
+.game {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  .indieFont{
+    font-family: 'Indie Flower', cursive;
+    font-size: 32px;
+    font-weight: 900;
+  }
+
+  .game-status{
+    margin-bottom: 5rem;
+    font-size: 29px;
+
+    .draw{
+      border: none;
+      background: none;
+      font-size: 26px;
+      color:#fff;
+      cursor: pointer;
+    }
+  }
+
+  //results
+  .results{
+    width: 100%;
+    text-align: center;
+    margin-bottom: 2rem;
+
+    .players{
+      display: flex;
+      justify-content: space-around;
+      font-size: 18px;
+
+      .player-result{
+        @extend .indieFont;
+      }
+
+      .green{
+        color:green;
+      }
+
+      .red{
+        color:red;
+      }
+    }
+  }
+
+  //form for enter names of players
+  .player-names{
+    position: absolute;
+    top: 40px;
+    left: 40px;
+
+    input{
+      display: block;
+      background: none;
+      border-bottom: 1px solid #fff;
+      margin-bottom: 20px;
+      color:#fff;
+      padding: .5rem 1rem;
+      outline:none;
+    }
+  }
+
+  //game boeard
+  .game-board{
+    box-shadow: 6px 4px 10px #8d8d8d;
+  }
+
+  //bottom buttons
+  .btn{
+    position: relative;
+    margin-top: 2rem;
+    padding: 1rem 4rem;
+    width: 196px;
+    border: 1px solid #fff;
+    cursor: pointer;
+    outline: none;
+  }
+
+  .game-reset{
+    background: none;
+    color: #fff;
+    @include  transition(250ms);
+  }
+
+  .game-reset:hover{
+    box-shadow: inset 0 0 5px 1px #fff;
+  }
+
+  .new-game{
+    background: #fff;
+  }
+
+  .new-game:hover{
+    animation: swing 1s ease;
+    animation-iteration-count:1;
+  }
+}
+
+.animated {
+  -webkit-animation-duration: 1s;
+  animation-duration: 1s;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
+  -webkit-animation-iteration-count: infinite;
+  animation-iteration-count: infinite;
+}
+
+.swing{
+  animation: swing 1s ease;
+  animation-iteration-count: infinite;
+}
+
+
+.tada {
+  -webkit-animation-name: tada;
+  animation-name: tada;
+}
+
+@keyframes swing
+{
+  15%
+  {
+    -webkit-transform: translateX(5px);
+    transform: translateX(5px);
+  }
+  30%
+  {
+    -webkit-transform: translateX(-5px);
+    transform: translateX(-5px);
+  }
+  50%
+  {
+    -webkit-transform: translateX(3px);
+    transform: translateX(3px);
+  }
+  65%
+  {
+    -webkit-transform: translateX(-3px);
+    transform: translateX(-3px);
+  }
+  80%
+  {
+    -webkit-transform: translateX(2px);
+    transform: translateX(2px);
+  }
+  100%
+  {
+    -webkit-transform: translateX(0);
+    transform: translateX(0);
+  }
+}
+
+@keyframes tada {
+  0% {
+    -webkit-transform: scale3d(1, 1, 1);
+    -ms-transform: scale3d(1, 1, 1);
+    transform: scale3d(1, 1, 1);
+  }
+
+  10%, 20% {
+    -webkit-transform: scale3d(.9, .9, .9) rotate3d(0, 0, 1, -3deg);
+    -ms-transform: scale3d(.9, .9, .9) rotate3d(0, 0, 1, -3deg);
+    transform: scale3d(.9, .9, .9) rotate3d(0, 0, 1, -30deg);
+  }
+
+  30%, 50%, 70%, 90% {
+    -webkit-transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, 3deg);
+    -ms-transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, 3deg);
+    transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, 30deg);
+  }
+
+  40%, 60%, 80% {
+    -webkit-transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, -3deg);
+    -ms-transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, -3deg);
+    transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, -3deg);
+  }
+
+  100% {
+    -webkit-transform: scale3d(1, 1, 1);
+    -ms-transform: scale3d(1, 1, 1);
+    transform: scale3d(1, 1, 1);
+  }
+}
+
