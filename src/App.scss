@@ -141,14 +141,12 @@ button,input {
   animation-iteration-count: infinite;
 }
 
-
 .tada {
   -webkit-animation-name: tada;
   animation-name: tada;
 }
 
-@keyframes swing
-{
+@keyframes swing {
   15%
   {
     -webkit-transform: translateX(5px);
