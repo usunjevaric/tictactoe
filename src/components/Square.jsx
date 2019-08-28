@@ -1,5 +1,5 @@
 import React from 'react';
-import ('./square.scss');
+// import ('../styles/_square.scss');
 function Square(props){
     return (
         <button

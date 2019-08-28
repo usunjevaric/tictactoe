@@ -1,7 +1,7 @@
 import React from 'react';
 import Board from './components/Board';
 
-import ('./App.scss');
+// import ('./styles/_app.scss');
 
 class App extends React.Component {
     constructor(props) {

@@ -1,0 +1,83 @@
+.animated {
+  -webkit-animation-duration: 1s;
+  animation-duration: 1s;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
+  -webkit-animation-iteration-count: infinite;
+  animation-iteration-count: infinite;
+}
+
+.swing{
+  animation: swing 1s ease;
+  animation-iteration-count: infinite;
+}
+
+.tada {
+  -webkit-animation-name: tada;
+  animation-name: tada;
+}
+
+@keyframes swing {
+  15%
+  {
+    -webkit-transform: translateX(5px);
+    transform: translateX(5px);
+  }
+  30%
+  {
+    -webkit-transform: translateX(-5px);
+    transform: translateX(-5px);
+  }
+  50%
+  {
+    -webkit-transform: translateX(3px);
+    transform: translateX(3px);
+  }
+  65%
+  {
+    -webkit-transform: translateX(-3px);
+    transform: translateX(-3px);
+  }
+  80%
+  {
+    -webkit-transform: translateX(2px);
+    transform: translateX(2px);
+  }
+  100%
+  {
+    -webkit-transform: translateX(0);
+    transform: translateX(0);
+  }
+}
+
+@keyframes tada {
+  0% {
+    -webkit-transform: scale3d(1, 1, 1);
+    -ms-transform: scale3d(1, 1, 1);
+    transform: scale3d(1, 1, 1);
+  }
+
+  10%, 20% {
+    -webkit-transform: scale3d(.9, .9, .9) rotate3d(0, 0, 1, -3deg);
+    -ms-transform: scale3d(.9, .9, .9) rotate3d(0, 0, 1, -3deg);
+    transform: scale3d(.9, .9, .9) rotate3d(0, 0, 1, -30deg);
+  }
+
+  30%, 50%, 70%, 90% {
+    -webkit-transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, 3deg);
+    -ms-transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, 3deg);
+    transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, 30deg);
+  }
+
+  40%, 60%, 80% {
+    -webkit-transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, -3deg);
+    -ms-transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, -3deg);
+    transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, -3deg);
+  }
+
+  100% {
+    -webkit-transform: scale3d(1, 1, 1);
+    -ms-transform: scale3d(1, 1, 1);
+    transform: scale3d(1, 1, 1);
+  }
+}

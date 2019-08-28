@@ -1,0 +1,12 @@
+
+//set direction of winning line
+@mixin direction($top,$left,$height,$transform){
+  top:$top;
+  left:$left;
+  height: $height;
+  transform: rotate($transform);
+};
+
+@mixin transition($speed){
+  transition: $speed ease-in-out all;
+}
