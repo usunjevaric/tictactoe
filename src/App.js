@@ -1,100 +1,57 @@
 import React from 'react';
 import Board from './components/Board';
-
-// import ('./styles/_app.scss');
+import Menu from './components/Menu';
+import {connect} from 'react-redux';
+import {toggleMenu,switchTheme} from "./redux/actions/showMenuActions";
+import {updatePlayerO,updatePlayerX} from "./redux/actions/playersActions";
+import {clickOnSquare,resetGame,newGame,incrementWinn} from "./redux/actions/gameActions";
+import {calculateWinner} from "./calculateWinner";
 
 class App extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            squares: Array(9).fill(null),
-            xIsNext: true,
-            winns:{
-              x:0,
-              o:0
-            },
-            names:{
-              playerX:'Player1',
-              playerO:'Player2'
-            }
-        };
-    }
     //click on square
     handleClick= i=> {
-        const squares = this.state.squares.slice();
+        const squares = this.props.squares.slice();
         if (calculateWinner(squares).line.length>0||squares[i]) {
             return;
         }
-        squares[i] = this.state.xIsNext ? "X" : "O";
-        this.setState({
+        squares[i] = this.props.xIsNext ? "X" : "O";
+        const obj={
             squares:squares,
-            xIsNext: !this.state.xIsNext
-        });
-    }
-    //button restart
-    handleRestart=lastWinner=>{
-        let onPlay;
-        if(lastWinner==="X"){
-            onPlay=false
-            this.setState({
-              squares: Array(9).fill(null),
-              xIsNext:onPlay,
-              winns:{
-                x:this.state.winns.x+1,
-                o:this.state.winns.o
-              }
-          })
-        }else if(lastWinner==='O'){
-            onPlay=true
-            this.setState({
-              squares: Array(9).fill(null),
-              xIsNext:onPlay,
-              winns:{
-                o:this.state.winns.o+1,
-                x:this.state.winns.x
-              }
-          })
-        }else if(lastWinner===null){
-          onPlay=true
-          this.setState({
-            squares: Array(9).fill(null),
-            xIsNext:onPlay,
-            winns:{
-              o:this.state.winns.o,
-              x:this.state.winns.x
-            }
-        })
+            xIsNext:!this.props.xIsNext
+        };
+        this.props.onSquareClick(obj);
+        //if side menu opened close it after click on square
+        if(this.props.showMenu===true){
+            this.props.onMenuToggleClick();
         }
-
-    }
+    };
+    //button restart
+    handleRestart=lastWinner=> {
+        if (lastWinner==="X"){
+            this.props.incrementWinner("x");
+        }
+        if (lastWinner==="O"){
+            this.props.incrementWinner("o")
+        }
+        this.props.onResetGame();
+    };
     //after draw button showed
     drawReset=lastGamePlayer=>{
       let onPlay;
-      if(lastGamePlayer==="X"){
-        onPlay=false
-      }else{
-        onPlay=true
-      }
-      this.setState({
-        squares: Array(9).fill(null),
-        xIsNext:onPlay,
-        winns:{
-          o:this.state.winns.o,
-          x:this.state.winns.x
-        }
-    })
-    }
+      lastGamePlayer==="X"?onPlay=false:onPlay=true;
+        const obj={
+            winns:{
+                x:this.props.winns.x,
+                o:this.props.winns.o,
+            },
+            xIsNext:onPlay
+        };
+        this.props.onResetGame(obj);
+    };
     //start new game button
     handleNawGame=()=>{
-      this.setState({
-        squares: Array(9).fill(null),
-        xIsNext: true,
-        winns:{
-          x:0,
-          o:0
-        }
-      })
-    }
+        this.props.onNewGame();
+    };
     // change name of player x
     handleUpdatePlayerX=event=>{
       let playerName;
@@ -103,13 +60,8 @@ class App extends React.Component {
       }else{
         playerName=event.target.value;
       }
-      this.setState({
-        names:{
-          playerX:playerName,
-          playerO:this.state.names.playerO
-        }
-      })
-    }
+      this.props.onPlayerXChange(playerName);
+    };
     // change name of player o
     handleUpdatePlayerO=event=>{
       let playerName;
@@ -118,81 +70,90 @@ class App extends React.Component {
       }else{
         playerName=event.target.value;
       }
-      this.setState({
-        names:{
-          playerX:this.state.names.playerX,
-          playerO:playerName
-        }
-      })
-    }
-
+      this.props.onPlayerOChange(playerName);
+    };
+    //toggle side menu on click
+    handleMenu=()=>{
+       this.props.onMenuToggleClick();
+    };
     //Green result of better player
     CurrentBeter(pl1,pl2){
-      if(pl1===pl2){
-        return null
-      }else if(pl1>pl2){
-        return "green"
-      }else{
-        return "red"
-      }
-    }
+        if(pl1===pl2){
+            return null
+        }else if(pl1>pl2){
+            return "green"
+        }else{
+            return "red"
+        }
+    };
 
     render() {
-        let winner = calculateWinner(this.state.squares);
+        const {showMenu,playerX,playerO,squares,xIsNext,winns,darkTheme}=this.props;
+        let winner = calculateWinner(squares);
         let status;
+
         if (winner.line.length>0) {
               status=
               <div className='game-status animated tada'>
-                Winner is: {winner.player}({winner.player==="X"?this.state.names.playerX:this.state.names.playerO})
+                Winner is: {winner.player}({winner.player==="X"?playerX:playerO})
               </div>
         }else {
-            if(this.state.squares.includes(null)){
+            if(squares.includes(null)){
               status=
               <div className='game-status'>
                 Next player:
                  <span className='indieFont'>
-                  {(this.state.xIsNext ? "X" : "O")}
+                  {(xIsNext ? "X" : "O")}
                 </span>
               </div>
             }else{
               status=
               <div className='game-status'>
                 Draw, 
-                <button className='draw swing' onClick={()=>this.drawReset((this.state.xIsNext ? "X" : "O"))}>
+                <button className='draw swing' onClick={()=>this.drawReset((xIsNext ? "X" : "O"))}>
                   play again
                 </button>
               </div>
             }
         }
-
         return (
+            <React.Fragment>
+                {
+                    showMenu &&
+                        <Menu
+                            handleUpdatePlayerX={this.handleUpdatePlayerX}
+                            handleUpdatePlayerO={this.handleUpdatePlayerO}
+                            handleMenu={this.handleMenu}
+                            darkTheme={darkTheme}
+                            switchTheme={this.props.switchTheme}
+                        />
+                }
             <div className="game">
+                {/*side menu btn and menu*/}
+                <div className={'menuBtn ' +(showMenu?'closeMenu':'showMenu')}>
+                    <button onClick={this.handleMenu}>
+                        {showMenu?'X':<i className='fa fa-bars'/>}
+                    </button>
+                </div>
                 {/*results*/}
                   <div className='results'>
                     <p>Results</p>
                     <div className='players'>
                       <p>
-                      {this.state.names.playerX}: <span className={'player-result '+(this.CurrentBeter(this.state.winns.x,this.state.winns.o))}>{this.state.winns.x}</span>
+                      {playerX}: <span className={'player-result '+(this.CurrentBeter(winns.x,winns.o))}>{winns.x}</span>
                       </p>
                       <p>
-                      {this.state.names.playerO}: <span className={'player-result '+(this.CurrentBeter(this.state.winns.o,this.state.winns.x))}>{this.state.winns.o}</span>
+                      {playerO}: <span className={'player-result '+(this.CurrentBeter(winns.o,winns.x))}>{winns.o}</span>
                       </p>
                     </div>
                   </div>
                   {status}
-                  <div className='player-names'>
-                    <form>
-                      <label htmlFor='playerX'>Player X name</label>
-                      <input type='text' id='playerX' name='playerX' placeholder='Enter name of player X' onChange={this.handleUpdatePlayerX} />
-                      <label htmlFor='playerO'>Player O name</label>
-                      <input type='text' id='playerO' name='playerO' placeholder='Enter name of player O' onChange={this.handleUpdatePlayerO} />
-                    </form>
-                  </div>
+
                     <div className="game-board">
                         <Board
                             winningSquares={winner ? winner.line : []}
                             direction={winner?winner.direction:""}
-                            squares={this.state.squares}
+                            squares={squares}
                             onClick={i => this.handleClick(i)}
                         />
                     </div>
@@ -208,44 +169,50 @@ class App extends React.Component {
                       New game
                     </button>
             </div>
+            </React.Fragment>
         );
     }
 }
 
-function calculateWinner(squares) {
-    const lines = [
-        [0, 1, 2],
-        [3, 4, 5],
-        [6, 7, 8],
-        [0, 3, 6],
-        [1, 4, 7],
-        [2, 5, 8],
-        [0, 4, 8],
-        [2, 4, 6]
-    ];
-       return lines.reduce((acc,line,idx)=>{
-          const[a,b,c]=line;
+const mapStateToProps=state=>{
+    return{
+        darkTheme:state.toggleMenu.darkTheme,
+        showMenu:state.toggleMenu.showMenu,
+        playerX:state.players.playerX,
+        playerO:state.players.playerO,
+        squares:state.game.squares,
+        xIsNext:state.game.xIsNext,
+        winns:state.game.winns,
+    }
+};
 
-          let dir;
-          if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
-            if(idx<=2){
-              dir=1;
-            }else if(idx<=5){
-              dir=2;
-            }else if(idx===6){
-              dir=3
-            }else if(idx===7){
-              dir=4
-            }
-            acc.player=squares[a];
-            acc.line=line;
-            acc.direction=dir;  
-          }
-          return acc;
-        },{
-          player:'',
-        line:[],
-        direction:-1
-      })
-}
-export default App
+const mapDispatchToProps=(dispatch)=>{
+  return{
+      onMenuToggleClick:()=>{
+          dispatch(toggleMenu())
+      },
+      onPlayerXChange:(playerName)=>{
+          dispatch(updatePlayerX(playerName))
+      },
+      onPlayerOChange:(playerName)=>{
+          dispatch(updatePlayerO(playerName))
+      },
+      onSquareClick:(obj)=>{
+          dispatch(clickOnSquare(obj))
+      },
+      onResetGame:()=>{
+          dispatch(resetGame())
+      },
+      onNewGame:()=>{
+          dispatch(newGame())
+      },
+      incrementWinner:(winner)=>{
+          dispatch(incrementWinn(winner))
+      },
+      switchTheme:()=>{
+          dispatch(switchTheme())
+      }
+  }
+};
+
+export default connect(mapStateToProps,mapDispatchToProps)(App)

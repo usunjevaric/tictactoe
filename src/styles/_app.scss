@@ -9,9 +9,8 @@ body {
   background: -webkit-linear-gradient(to right, #191654, #43C6AC);  /* Chrome 10-25, Safari 5.1-6 */
   background: linear-gradient(to right, #191654, #43C6AC); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
   color: #fff;
+  overflow-y: hidden;
 }
-
-
 
 ::placeholder{
   color:rgba(255, 255, 255, 0.733);
@@ -67,22 +66,7 @@ body {
     }
   }
 
-  //form for enter names of players
-  .player-names{
-    position: absolute;
-    top: 40px;
-    left: 40px;
 
-    input{
-      display: block;
-      background: none;
-      border-bottom: 1px solid #fff;
-      margin-bottom: 20px;
-      color:#fff;
-      padding: .5rem 1rem;
-      outline:none;
-    }
-  }
 
   //game boeard
   .game-board{

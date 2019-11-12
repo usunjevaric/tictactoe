@@ -1,0 +1,81 @@
+.menu{
+  background-color: $menuColor;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 90px;
+  box-shadow: 1px 0 8px 1px lighten($menuColor,20%);
+  .player-names{
+
+    input{
+      display: block;
+      background: none;
+      border-bottom: 1px solid #fff;
+      margin-bottom: 20px;
+      color:#fff;
+      padding: .5rem 1rem;
+      outline:none;
+    }
+  }
+
+  .change-theme{
+    position: absolute;
+    bottom:150px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    button{
+      position: relative;
+      margin-top: 10px;
+      height: 35px;
+      width: 65px;
+      border-radius: 20px;
+      cursor: pointer;
+
+
+      &::before{
+        content: '';
+        position: absolute;
+        top: 0;
+        height: 35px;
+        width: 50%;
+        border-radius: 20px;
+        transition: 1s ease-in-out all;
+      }
+      &.theme-light::before{
+        left: 0;
+        background-color: red;
+      }
+      &.theme-dark::before{
+        right: 0;
+        background-color: red;
+      }
+    }
+  }
+}
+
+.menuBtn{
+  position: absolute;
+  top: 20px;
+  left:30px;
+  transition: 250ms ease-in-out all;
+
+
+  button{
+    background:none;
+    color: #fff;
+    font-size: 24px;
+    cursor: pointer;
+
+  }
+}
+.closeMenu{
+  left: 320px;
+
+}
