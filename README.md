@@ -1,6 +1,7 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## About Project
+## About Project [![Website shields.io](https://img.shields.io/website-up-down-green-red/http/shields.io.svg)](https://tictactoe-usunjevaric.netlify.app/)
+
 
 Project was builded as first react real project, for practicing all concepts. Using both class and function components. For state management in this application i used redux library.
 
